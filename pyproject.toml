@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone-easyhotpotato"
+version = "0.1.0"
+authors = [
+    { name = "MengHanLOVE", email = "2193438288@qq.com" },
+]
+description = "基于 EndStone 的最最最简单的Python热土豆插件 / The simplest Python hot potato plugin based on EndStone."
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.8"
+keywords = ["endstone", "plugins", "backup"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "psutil>=5.9.0",
+    "requests>=2.28.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/MengHanLOVE1027/endstone-easyhotpotato"
+
+[project.entry-points."endstone"]
+easyhotpotato = "endstone_easyhotpotato:EasyHotPotatoPlugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/endstone_easyhotpotato"]
