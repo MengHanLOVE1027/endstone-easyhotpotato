@@ -1,10 +1,10 @@
 <div align="center">
 
-![EndStone-EasyHotPotato](https://socialify.git.ci/MengHanLOVE1027/endstone-easyhotpotato/image?custom_language=Python&description=1&font=Inter&forks=1&issues=1&language=1&logo=https://avatars.githubusercontent.com/u/99132833?v=4&name=1&owner=1&pattern=Plus&pulls=1&stargazers=1&theme=Auto)
+![EndStone-EasyHotPotato](https://socialify.git.ci/MengHanLOVE1027/endstone-easyhotpotato/image?custom_language=Python&description=1&font=Inter&forks=1&issues=1&language=1&logo=https://zh.minecraft.wiki/images/Potato_JE3_BE2.png&name=1&owner=1&pattern=Plus&pulls=1&stargazers=1&theme=Auto)
 <h3>EndStone-EasyHotPotato</h3>
 
 <p>
-  <b>一个基于 EndStone 的轻量级、高性能、功能全面的Minecraft服务器烫手山芋游戏插件。 </b>
+  <b>一个基于 EndStone 的烫手山芋游戏插件</b>
 
 Powered by EndStone.<br>
 </p>
@@ -176,10 +176,6 @@ EasyHotPotato 是一个专为 EndStone 服务器设计的烫手山芋游戏插�
 - **倒计时阶段**：显示游戏开始倒计时
 - **游戏进行中**：显示山芋持有者和剩余时间
 - **淘汰提示**：显示被淘汰玩家信息
-
-### 🌈 彩虹跑马灯
-
-游戏空闲时，BossBar会显示彩虹循环跑马灯效果，增强服务器氛围。
 
 ---
 
