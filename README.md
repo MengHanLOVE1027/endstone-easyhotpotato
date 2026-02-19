@@ -70,7 +70,7 @@ EasyHotPotato 是一个专为 EndStone 服务器设计的烫手山芋游戏插�
 
 1. **下载插件**
    - 从 [Release页面](https://github.com/MengHanLOVE1027/endstone-easyhotpotato/releases) 下载最新版本
-   - 或从 [MineBBS](https://www.minebbs.com/resources/easyhotpotato-eb-minecraft.14897/) 获取
+   - 或从 [MineBBS](https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/) 获取
 
 2. **安装插件**
    ```bash
@@ -263,7 +263,7 @@ EasyHotPotato 是一个专为 EndStone 服务器设计的烫手山芋游戏插�
 ## 🌟 支持与反馈
 
 - **GitHub Issues**: [提交问题](https://github.com/MengHanLOVE1027/endstone-easyhotpotato/issues)
-- **MineBBS**: [讨论帖](https://www.minebbs.com/resources/easyhotpotato-eb-minecraft.14897/)
+- **MineBBS**: [讨论帖](https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/)
 - **作者**: 梦涵LOVE
 
 ---
