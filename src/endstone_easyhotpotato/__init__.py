@@ -1,3 +1,3 @@
-from endstone_easyhotpotato.easyhotpotato import EasyHotPotatoPlugin
+from easyhotpotato import EasyHotPotatoPlugin
 
 __all__ = ["EasyHotPotatoPlugin"]
