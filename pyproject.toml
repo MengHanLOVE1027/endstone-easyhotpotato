@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "endstone-easyhotpotato"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
     { name = "MengHanLOVE", email = "2193438288@qq.com" },
 ]
@@ -17,10 +17,6 @@ keywords = ["endstone", "plugins", "backup"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
-]
-dependencies = [
-    "psutil>=5.9.0",
-    "requests>=2.28.0",
 ]
 
 [project.urls]

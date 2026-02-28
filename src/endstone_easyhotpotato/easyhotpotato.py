@@ -11,10 +11,13 @@ import json
 from endstone.plugin import Plugin
 from endstone.command import CommandSenderWrapper, Command
 from endstone import Player
+from endstone.level import Location
 from endstone.event import *
 from endstone.form import ActionForm, MessageForm, ModalForm, Button, TextInput, Slider, Toggle, Dropdown, Header, Label, Divider
 from endstone.boss import BarColor, BarStyle
 
+# Easy系列插件的 BStats 遥测模块
+from .bstats import BStats
 
 # 游戏状态常量
 GAME_STATE_IDLE = 0      # 游戏空闲
@@ -56,18 +59,80 @@ COLOR_GRAY = "§7"
 plugin_name = "EasyHotPotato"
 plugin_name_smallest = "easyhotpotato"
 plugin_description = "基于 EndStone 的烫手山芋插件 / The Python hot potato plugin based on EndStone."
-plugin_version = "0.1.0"
+plugin_version = "0.1.1"
 plugin_author = ["梦涵LOVE"]
 plugin_the_help_link = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
 plugin_website = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
+plugin_minebbs_link = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
 plugin_github_link = "https://github.com/MengHanLOVE1027/endstone-easyhotpotato"
 plugin_license = "AGPL-3.0"
 plugin_copyright = "务必保留原作者信息！"
 
-success_plugin_version = "v" + plugin_version
-plugin_full_name = plugin_name + " " + success_plugin_version
+current_plugin_version = "v" + plugin_version
+plugin_full_name = plugin_name + " " + current_plugin_version
 
 plugin_path = Path(f"./plugins/{plugin_name}")
+
+
+# --- 随机颜色系统 ---
+GLOBAL_C1 = None
+GLOBAL_C2 = None
+
+def randomVividColor():
+    """生成一个鲜艳的随机颜色"""
+    rand = random.random() * 260
+    if rand < 90:
+        h = rand
+    elif rand < 200:
+        h = rand + 60
+    else:
+        h = rand + 100
+    s = 0.90 + random.random() * 0.10
+    l = 0.65 + random.random() * 0.15
+    a = s * min(l, 1 - l)
+    def f(n):
+        k = (n + h / 30) % 12
+        return round((l - a * max(-1, min(k - 3, 9 - k, 1))) * 255)
+    return [f(0), f(8), f(4)]
+
+def generateColorPair():
+    """生成一对颜色"""
+    c1 = randomVividColor()
+    c2, attempts = 0, 0
+    while True:
+        c2 = randomVividColor()
+        diff = abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
+        if diff > 150 or attempts > 20:
+            break
+        attempts += 1
+    return [c1, c2]
+
+GLOBAL_C1, GLOBAL_C2 = generateColorPair()
+
+def globalLerpColor(t):
+    """在全局颜色对之间进行线性插值"""
+    return [
+        round(GLOBAL_C1[0] + (GLOBAL_C2[0] - GLOBAL_C1[0]) * t),
+        round(GLOBAL_C1[1] + (GLOBAL_C2[1] - GLOBAL_C1[1]) * t),
+        round(GLOBAL_C1[2] + (GLOBAL_C2[2] - GLOBAL_C1[2]) * t)
+    ]
+
+def randomGradientColor(text):
+    """生成随机渐变色文本"""
+    lenth = len(text)
+    out = ''
+    for i in range(lenth):
+        t = 0 if lenth <= 1 else i / (lenth - 1)
+        r, g, b = globalLerpColor(t)
+        out += f"\x1b[38;2;{r};{g};{b}m{text[i]}"
+    return out + "\x1b[0m"
+
+class RandomColor:
+    """随机颜色类，用于生成随机渐变色文本"""
+    def __init__(self, text):
+        self.text = text
+    def __str__(self):
+        return randomGradientColor(self.text)
 
 # 嘲讽语录列表
 TAUNT_MESSAGES = [
@@ -83,12 +148,11 @@ TAUNT_MESSAGES = [
     "你中奖了！土豆归你了！"
 ]
 
-
 # 创建一个锁对象，用于线程安全
 print_lock = Lock()
 
 # 创建logs目录
-log_dir = Path("./logs/EasyBackuper")
+log_dir = Path(f"./logs/{plugin_name}")
 if not log_dir.exists():
     log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -131,7 +195,7 @@ def plugin_print(text, level="INFO") -> bool:
     
     # 使用锁确保线程安全
     with print_lock:
-        print(logger_head + str(text))
+        print(logger_head + str(RandomColor(text)))
     
     # 记录到日志文件
     log_level_map = {
@@ -455,6 +519,10 @@ class EasyHotPotatoPlugin(Plugin):
 
     def on_load(self):
         """插件加载时调用"""
+        # bStats统计功能
+        plugin_id = 29833
+        self._metrics = BStats(self, plugin_id)
+        self._metrics.start()  # 启动定时提交任务
         plugin_print(f"{self.full_name} 正在加载...")
         
         # 初始化数据目录
@@ -474,6 +542,25 @@ class EasyHotPotatoPlugin(Plugin):
 
         # 加载配置文件
         self.load_config()
+        
+        print(RandomColor("███████╗ █████╗ ███████╗██╗   ██╗██╗  ██╗ ██████╗ ████████╗██████╗  ██████╗ ████████╗ █████╗ ████████╗ ██████╗ "))
+        print(RandomColor("██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝██║  ██║██╔═══██╗╚══██╔══╝██╔══██╗██╔═══██╗╚══██╔══╝██╔══██╗╚══██╔══╝██╔═══██╗"))
+        print(RandomColor("█████╗  ███████║███████╗ ╚████╔╝ ███████║██║   ██║   ██║   ██████╔╝██║   ██║   ██║   ███████║   ██║   ██║   ██║"))
+        print(RandomColor("██╔══╝  ██╔══██║╚════██║  ╚██╔╝  ██╔══██║██║   ██║   ██║   ██╔═══╝ ██║   ██║   ██║   ██╔══██║   ██║   ██║   ██║"))
+        print(RandomColor("███████╗██║  ██║███████║   ██║   ██║  ██║╚██████╔╝   ██║   ██║     ╚██████╔╝   ██║   ██║  ██║   ██║   ╚██████╔╝"))
+        print(RandomColor("╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝      ╚═════╝    ╚═╝   ╚═╝  ╚═╝   ╚═╝    ╚═════╝"))
+        print(RandomColor(f"""                                作者：{plugin_author[0]}               版本：{plugin_version}"""))
+        plugin_print(f"="*80, "INFO")
+        plugin_print(f"{plugin_name} - {plugin_description}")
+        plugin_print(f"感谢您使用Easy系列插件！")
+        plugin_print(f"本插件使用 {plugin_license} 许可证协议进行发布")
+        plugin_print(f"插件GitHub项目仓库地址：{plugin_github_link}")
+        plugin_print(f"插件MineBBS资源帖：{plugin_minebbs_link}")
+        plugin_print(f"Easy系列插件交流群：1083195477")
+        plugin_print(f"作者：{plugin_author[0]} | 版本：{plugin_version}")
+        plugin_print(f"="*80, "INFO")
+        
+        plugin_print(f"{plugin_name} 已加载", "INFO")
 
         plugin_print(f"{self.full_name} 已加载!")
 
@@ -488,6 +575,7 @@ class EasyHotPotatoPlugin(Plugin):
 
     def on_disable(self):
         """插件禁用时调用"""
+        self._metrics.shutdown() # 关闭bStats统计
         plugin_print(f"{self.full_name} 正在禁用...")
         if self.data_manager:
             self.data_manager.save_player_stats()
@@ -1183,7 +1271,6 @@ class EasyHotPotatoPlugin(Plugin):
             
             # 使用Location对象传送玩家
             try:
-                from endstone._internal.endstone_python import Location
                 location = Location(dimension=player.dimension, x=new_x, y=new_y, z=new_z)
                 player.teleport(location)
                 player.send_message(f"§a你已被传送到游戏区域: X={new_x:.2f}, Y={new_y:.2f}, Z={new_z:.2f}")
@@ -1817,7 +1904,6 @@ class EasyHotPotatoPlugin(Plugin):
             
             # 使用Location对象传送玩家（与start_game使用相同的方式）
             try:
-                from endstone._internal.endstone_python import Location
                 location = Location(dimension=player.dimension, x=x, y=y, z=z)
                 player.teleport(location)
                 try:
