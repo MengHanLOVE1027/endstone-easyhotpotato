@@ -59,12 +59,13 @@ COLOR_GRAY = "§7"
 plugin_name = "EasyHotPotato"
 plugin_name_smallest = "easyhotpotato"
 plugin_description = "基于 EndStone 的烫手山芋插件 / The Python hot potato plugin based on EndStone."
-plugin_version = "0.1.1"
+plugin_version = "0.1.2"
 plugin_author = ["梦涵LOVE"]
 plugin_the_help_link = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
 plugin_website = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
 plugin_minebbs_link = "https://www.minebbs.com/resources/easyhotpotato-ehp-endstone.15329/"
 plugin_github_link = "https://github.com/MengHanLOVE1027/endstone-easyhotpotato"
+plugin_update_url = "https://raw.githubusercontent.com/MengHanLOVE1027/endstone-easyhotpotato/refs/heads/main/update_versions.json"
 plugin_license = "AGPL-3.0"
 plugin_copyright = "务必保留原作者信息！"
 
@@ -451,6 +452,7 @@ class EasyHotPotatoPlugin(Plugin):
     version = plugin_version
     authors = plugin_author
     website = plugin_website
+    update_url = plugin_update_url
 
     # NOTE: 注册命令
     commands = {

@@ -1,0 +1,11 @@
+{
+    "latest_version": "0.1.2",
+    "versions": {
+        "0.1.2": {
+            "download_url": "https://github.com/MengHanLOVE1027/endstone-easyhotpotato/releases/download/v0.1.2/endstone_easyhotpotato-0.1.2-py3-none-any.whl",
+            "update_content": "更新版本至 v0.1.2，添加update_link字段，优化遥测日志输出",
+            "author": "梦涵LOVE",
+            "update_time": "2026-03-01 11:50:00"
+        }
+    }
+}
