@@ -229,7 +229,7 @@ class DataManager:
         self.player_stats: Dict[str, Dict] = {}
         self.game_history_file = None
         self.game_history: List[Dict] = []
-    
+
     def load_player_stats(self):
         """加载玩家战绩数据"""
         try:
